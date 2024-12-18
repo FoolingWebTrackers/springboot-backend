@@ -1,0 +1,40 @@
+services:
+  jester-server:
+    image: jester-server:1.0
+    container_name: jester-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    ports:
+      - '8080:8080'
+    networks:
+      - local-network
+
+
+  postgres-db:
+    image: postgres:14
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data # Main persistent file, postgres won't execute init if this exists
+      - ./init_scripts:/docker-entrypoint-initdb.d:ro  # Initialization script
+    networks:
+      - local-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  local-network:
+    driver: bridge
