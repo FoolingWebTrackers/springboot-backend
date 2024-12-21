@@ -24,8 +24,8 @@ public class PersonaController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Persona> registerPersona(@Valid @RequestBody PersonaRegistrationDTO persona) {
+    public ResponseEntity<String> registerPersona(@Valid @RequestBody PersonaRegistrationDTO persona) {
         Persona newPersona =  personaService.registerPersona(persona.getUserName(), persona.getPersonaName(), persona.getDescription());
-        return ResponseEntity.status(HttpStatus.CREATED).body(newPersona);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Persona created.");
     }
 }
