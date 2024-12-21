@@ -3,6 +3,7 @@ package com.jester.backendserver.controller;
 import com.jester.backendserver.model.Persona;
 import com.jester.backendserver.model.PersonaRegistrationDTO;
 import com.jester.backendserver.service.PersonaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class PersonaController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Persona> registerPersona(@RequestBody PersonaRegistrationDTO persona) {
+    public ResponseEntity<Persona> registerPersona(@Valid @RequestBody PersonaRegistrationDTO persona) {
         Persona newPersona =  personaService.registerPersona(persona.getUserName(), persona.getPersonaName(), persona.getDescription());
         return ResponseEntity.status(HttpStatus.CREATED).body(newPersona);
     }
