@@ -15,6 +15,7 @@ public class UserProcedureRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    // Procedure
     public void createUser(String username, String password) {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery("create_user");
         query.registerStoredProcedureParameter(1, String.class, ParameterMode.IN);
@@ -28,7 +29,7 @@ public class UserProcedureRepository {
         query.execute();
     }
 
-
+    // Function
     public Boolean authenticateUser(String username, String password) {
         Query query = entityManager.createNativeQuery(
                 "SELECT authenticate_user(:uname, :pwd)", Boolean.class);

@@ -1,13 +1,12 @@
 package com.jester.backendserver.controller;
 
 import com.jester.backendserver.model.Persona;
-import com.jester.backendserver.model.User;
+import com.jester.backendserver.model.PersonaRegistrationDTO;
 import com.jester.backendserver.service.PersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +20,11 @@ public class PersonaController {
     public ResponseEntity<List<Persona>> getAllPersonas() {
         List<Persona> personas = personaService.getPersonas();
         return ResponseEntity.ok(personas);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Persona> registerPersona(@RequestBody PersonaRegistrationDTO persona) {
+        Persona newPersona =  personaService.registerPersona(persona.getUserName(), persona.getPersonaName(), persona.getDescription());
+        return ResponseEntity.status(HttpStatus.CREATED).body(newPersona);
     }
 }
