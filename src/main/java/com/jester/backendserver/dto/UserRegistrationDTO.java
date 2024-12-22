@@ -1,4 +1,4 @@
-package com.jester.backendserver.model;
+package com.jester.backendserver.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

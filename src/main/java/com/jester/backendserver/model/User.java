@@ -2,6 +2,9 @@ package com.jester.backendserver.model;
 
 
 import jakarta.persistence.*;
+import org.aspectj.weaver.patterns.PerObject;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -19,6 +22,9 @@ public class User {
 
     @Column(name="salt", nullable = false)
     private String salt;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Persona> personas;
 
     public Integer getId() {
         return id;
@@ -52,12 +58,20 @@ public class User {
         this.salt = salt;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                '}';
+    public List<Persona> getPersonas() {
+        return personas;
     }
+
+    public void setPersonas(List<Persona> personas) {
+        this.personas = personas;
+    }
+
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", username='" + username + '\'' +
+//                '}';
+//    }
 
 }

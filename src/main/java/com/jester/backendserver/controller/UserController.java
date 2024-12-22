@@ -1,7 +1,7 @@
 package com.jester.backendserver.controller;
 
 import com.jester.backendserver.model.User;
-import com.jester.backendserver.model.UserRegistrationDTO;
+import com.jester.backendserver.dto.UserRegistrationDTO;
 import com.jester.backendserver.repository.UserProcedureRepository;
 import com.jester.backendserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import jakarta.validation.Valid;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")

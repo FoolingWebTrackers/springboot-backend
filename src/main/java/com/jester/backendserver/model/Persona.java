@@ -2,6 +2,8 @@ package com.jester.backendserver.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "persona")
 public class Persona {
@@ -18,6 +20,19 @@ public class Persona {
 
     @Column(name="image")
     private byte[] image;
+
+    // Relationship to User through user_personas
+    @ManyToMany
+    @JoinTable(
+            name = "user_personas",
+            joinColumns = @JoinColumn(name = "persona_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users;
+
+    // Relationship to PersonaLinks
+    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PersonaLink> links;
 
     public Integer getId() {
         return id;
@@ -50,4 +65,21 @@ public class Persona {
     public void setImage(byte[] image) {
         this.image = image;
     }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<PersonaLink> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<PersonaLink> links) {
+        this.links = links;
+    }
+
 }

@@ -20,7 +20,7 @@ public class PersonaService {
     }
 
     public Persona registerPersona(String userName, String personaName, String description) {
-        personaProcedureRepository.createPersona(personaName, description, userName);
+        personaProcedureRepository.createPersona(userName, personaName, description);
         return personaRepository.getPersonaByName(personaName);
     }
 }

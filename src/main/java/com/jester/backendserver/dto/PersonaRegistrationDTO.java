@@ -1,4 +1,4 @@
-package com.jester.backendserver.model;
+package com.jester.backendserver.dto;
 
 // (uname TEXT, pname TEXT, pDesc TEXT)
 public class PersonaRegistrationDTO {
