@@ -19,8 +19,17 @@ public class PersonaService {
         return personaRepository.findAll();
     }
 
+    public Persona getPersona(Integer pid) {
+        return personaRepository.getPersonaById(pid);
+    }
+
     public Persona registerPersona(String userName, String personaName, String description) {
-        personaProcedureRepository.createPersona(userName, personaName, description);
-        return personaRepository.getPersonaByName(personaName);
+        Integer pid = personaProcedureRepository.createPersona(userName, personaName, description);
+        return getPersona(pid);
+    }
+
+    public Persona addURLs(List<String> urls, Integer pid) {
+        personaProcedureRepository.insertPersonaLinks(pid, urls);
+        return getPersona(pid);
     }
 }

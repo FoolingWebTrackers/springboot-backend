@@ -8,7 +8,8 @@ CREATE TABLE users (
 );
 
 CREATE TABLE persona (
-    id SERIAL PRIMARY KEY, 
+    id SERIAL PRIMARY KEY,
+
     name TEXT NOT NULL,
     description TEXT,
     image BYTEA

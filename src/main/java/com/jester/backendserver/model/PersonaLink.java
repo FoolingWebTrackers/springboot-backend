@@ -1,5 +1,6 @@
 package com.jester.backendserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -7,14 +8,15 @@ import jakarta.persistence.*;
 public class PersonaLink {
 
     @EmbeddedId
+    @JsonIgnore
     private PersonaLinkId id;
 
     @ManyToOne
     @MapsId("personaId")
     @JoinColumn(name = "persona_id", insertable = false, updatable = false)
+    @JsonIgnore
     private Persona persona;
 
-    // Removed direct column mapping for 'link' to avoid duplication
     public PersonaLinkId getId() {
         return id;
     }

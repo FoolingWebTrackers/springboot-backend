@@ -1,6 +1,7 @@
 package com.jester.backendserver.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.aspectj.weaver.patterns.PerObject;
 
@@ -18,9 +19,11 @@ public class User {
     private String username;
 
     @Column(name="password", nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(name="salt", nullable = false)
+    @JsonIgnore
     private String salt;
 
     @ManyToMany(mappedBy = "users")

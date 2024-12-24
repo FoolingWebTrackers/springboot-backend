@@ -24,7 +24,7 @@ public class UserProcedureRepository {
 
         query.setParameter(1, username);
         query.setParameter(2, password);
-        query.setParameter(3, Timestamp.from(Instant.now()).toString());
+        query.setParameter(3, Timestamp.from(Instant.now()).toString()); // TODO: Fix this
 
         query.execute();
     }

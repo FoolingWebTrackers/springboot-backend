@@ -1,5 +1,6 @@
 package com.jester.backendserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.util.Objects;
 @Embeddable
 public class PersonaLinkId implements Serializable {
     @Column(name = "persona_id")
+    @JsonIgnore
     private Integer personaId;
 
     @Column(name = "link")
