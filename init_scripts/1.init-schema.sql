@@ -1,18 +1,17 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY, 
-    username TEXT UNIQUE NOT NULL, 
+    id SERIAL PRIMARY KEY,
+    username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
     salt TEXT NOT NULL
 );
 
 CREATE TABLE persona (
     id SERIAL PRIMARY KEY,
-
     name TEXT NOT NULL,
     description TEXT,
-    image BYTEA
+    image TEXT
 );
 
 CREATE TABLE user_personas (

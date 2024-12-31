@@ -6,8 +6,8 @@ CREATE PROCEDURE create_user(uname TEXT, pwd TEXT, slt TEXT)
     LANGUAGE plpgsql
 AS $$
 BEGIN
-INSERT INTO users (username, password, salt)
-VALUES (uname, encode(digest(CONCAT(pwd, slt), 'sha256'), 'hex'), slt);
+    INSERT INTO users (username, password, salt)
+    VALUES (uname, encode(digest(CONCAT(pwd, slt), 'sha256'), 'hex'), slt);
 END;
 $$;
 
@@ -175,104 +175,106 @@ $$;
 -- --==================================================
 -- -- Market Place Stuff
 -- --==================================================
--- CREATE PROCEDURE sell_persona(uname TEXT, pname TEXT)
---     LANGUAGE plpgsql
--- AS $$
--- DECLARE
--- uid INT;
--- 	pid INT;
--- BEGIN
--- SELECT id INTO pid FROM persona WHERE persona.name = pname;
--- SELECT id INTO uid FROM users WHERE users.username = uname;
 --
--- INSERT INTO marketplace (seller_id, persona_id, user_num)
--- VALUES (uid, pid, 1);
--- END;
--- $$;
+CREATE PROCEDURE sell_persona(uname TEXT, pname TEXT)
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    uid INT;
+	pid INT;
+BEGIN
+    SELECT id INTO pid FROM persona WHERE persona.name = pname;
+    SELECT id INTO uid FROM users WHERE users.username = uname;
+
+    INSERT INTO marketplace (seller_id, persona_id, user_num)
+    VALUES (uid, pid, 1);
+END;
+$$;
+
 --
--- CREATE PROCEDURE buy_persona(uname TEXT, pname TEXT)
---     LANGUAGE plpgsql
--- AS $$
--- DECLARE
--- uid INT;
--- 	pid INT;
--- BEGIN
--- SELECT id INTO pid FROM persona WHERE persona.name = pname;
--- SELECT id INTO uid FROM users WHERE users.username = uname;
+CREATE PROCEDURE buy_persona(uname TEXT, pname TEXT)
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    uid INT;
+	pid INT;
+BEGIN
+    SELECT id INTO pid FROM persona WHERE persona.name = pname;
+    SELECT id INTO uid FROM users WHERE users.username = uname;
+
+    INSERT INTO user_personas (user_id, persona_id, first_access_date)
+    VALUES (uid, pid, CURRENT_DATE);
+
+    UPDATE marketplace
+    SET user_num = user_num + 1
+    WHERE seller_id = uid AND persona_id = pid;
+END;
+$$;
+
 --
--- INSERT INTO user_personas (user_id, persona_id, first_access_date)
--- VALUES (uid, pid, CURRENT_DATE);
+CREATE PROCEDURE remove_from_marketplace(uname TEXT, pname TEXT)
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    uid INT;
+	pid INT;
+BEGIN
+    SELECT id INTO pid FROM persona WHERE persona.name = pname;
+    SELECT id INTO uid FROM users WHERE users.username = uname;
+
+    DELETE FROM marketplace
+    WHERE seller_id = uid AND persona_id = pid;
+END;
+$$;
+
 --
--- UPDATE marketplace
--- SET user_num = user_num + 1
--- WHERE seller_id = uid AND persona_id = pid;
--- END;
--- $$;
+CREATE FUNCTION get_marketplace(uname TEXT)
+RETURNS TABLE (
+    seller_id INT,
+    persona_id INT,
+    user_num INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    uid INT;
+BEGIN
+    SELECT id INTO uid FROM users WHERE username = uname;
+
+    RETURN QUERY
+    SELECT
+        m.seller_id,
+        m.persona_id,
+        m.user_num
+    FROM
+        marketplace m
+    WHERE
+        m.seller_id != uid;
+END;
+$$;
+
 --
--- CREATE PROCEDURE remove_from_marketplace(uname TEXT, pname TEXT)
---     LANGUAGE plpgsql
--- AS $$
--- DECLARE
--- uid INT;
--- 	pid INT;
--- BEGIN
--- SELECT id INTO pid FROM persona WHERE persona.name = pname;
--- SELECT id INTO uid FROM users WHERE users.username = uname;
---
--- DELETE FROM marketplace
--- WHERE seller_id = uid AND persona_id = pid;
--- END;
--- $$;
---
---
---
---
--- CREATE FUNCTION get_marketplace(uname TEXT)
---     RETURNS TABLE (
---                       seller_id INT,
---                       persona_id INT,
---                       user_num INT
---                   )
---     LANGUAGE plpgsql
--- AS $$
--- DECLARE
--- uid INT;
--- BEGIN
--- SELECT id INTO uid FROM users WHERE username = uname;
---
--- RETURN QUERY
--- SELECT
---     m.seller_id,
---     m.persona_id,
---     m.user_num
--- FROM
---     marketplace m
--- WHERE
---     m.seller_id != uid;
--- END;
--- $$;
---
--- CREATE FUNCTION get_seller_personas(uname TEXT)
---     RETURNS TABLE (
---                       seller_id INT,
---                       persona_id INT,
---                       user_num INT
---                   )
---     LANGUAGE plpgsql
--- AS $$
--- DECLARE
--- uid INT;
--- BEGIN
--- SELECT id INTO uid FROM users WHERE username = uname;
---
--- RETURN QUERY
--- SELECT
---     m.seller_id,
---     m.persona_id,
---     m.user_num
--- FROM
---     marketplace m
--- WHERE
---     m.seller_id = uid;
--- END;
--- $$;
+CREATE FUNCTION get_seller_personas(uname TEXT)
+    RETURNS TABLE (
+        seller_id INT,
+        persona_id INT,
+        user_num INT
+    )
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    uid INT;
+BEGIN
+    SELECT id INTO uid FROM users WHERE username = uname;
+
+    RETURN QUERY
+    SELECT
+        m.seller_id,
+        m.persona_id,
+        m.user_num
+    FROM
+        marketplace m
+    WHERE
+        m.seller_id = uid;
+END;
+$$;
