@@ -1,6 +1,7 @@
 package com.jester.backendserver.controller;
 
 import com.jester.backendserver.model.Persona;
+import com.jester.backendserver.service.ImageService;
 import com.jester.backendserver.service.PersonaService;
 import com.jester.backendserver.service.UserService;
 import jakarta.validation.Valid;
@@ -20,9 +21,11 @@ import java.util.NoSuchElementException;
 public class PersonaImageController {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(PersonaImageController.class);
     private final PersonaService personaService;
+    private final ImageService imageService;
 
-    public PersonaImageController(PersonaService personaService) {
+    public PersonaImageController(PersonaService personaService, ImageService imageService) {
         this.personaService = personaService;
+        this.imageService = imageService;
     }
 
     @GetMapping("/test")
@@ -86,7 +89,7 @@ public class PersonaImageController {
             if (image_b64 == null || image_b64.isEmpty()) {
                 return ResponseEntity.badRequest().body("Error: 'image' is required.");
             }
-            if (!isBase64(image_b64)){
+            if (!imageService.isBase64(image_b64)){
                 return ResponseEntity.badRequest().body("Error: 'image' is not a Base64 image.");
             }
 
@@ -102,15 +105,6 @@ public class PersonaImageController {
             log.error("Error processing getImageBase64 request", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An unexpected error occurred. Please try again.");
-        }
-    }
-
-    private boolean isBase64(String base64) {
-        try {
-            Base64.getDecoder().decode(base64);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
         }
     }
 }

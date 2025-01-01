@@ -32,10 +32,19 @@ public class PersonaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Persona>> getAllPersonas() {
+    public ResponseEntity<List<Persona>> getAllPersonas(@Valid @RequestBody Map<String, Object> request) {
         String logMessage = "GET /api/personas";
         log.info(logMessage);
-        List<Persona> personas = personaService.getPersonas();
+        String username = request.get("username").toString();
+        List<Persona> personas;
+        if (username == null || username.isEmpty()) {
+            personas = personaService.getPersonas();
+        }
+        else {
+            personas = personaService.getPersonasByUsername(username);
+        }
+
+
         return ResponseEntity.ok(personas);
     }
 
@@ -78,7 +87,7 @@ public class PersonaController {
             if (description == null || description.isEmpty()) {
                 return ResponseEntity.badRequest().body("Error: 'description' is required.");
             }
-            if (generatePhoto == null || generatePhoto) {
+            if (generatePhoto == null) {
                 return ResponseEntity.badRequest().body("Error: 'generatePhoto' is required.");
             }
 
