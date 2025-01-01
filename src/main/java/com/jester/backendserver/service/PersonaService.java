@@ -25,7 +25,8 @@ public class PersonaService {
                 .orElseThrow(() -> new NoSuchElementException("Persona not found"));
     }
 
-    public Persona registerPersona(String userName, String personaName, String description) {
+    public Persona registerPersona(String userName, String personaName, String description, Boolean generatePhoto) {
+        // TODO: generate photo
         Integer pid = personaProcedureRepository.createPersona(userName, personaName, description);
         return getPersona(pid);
     }

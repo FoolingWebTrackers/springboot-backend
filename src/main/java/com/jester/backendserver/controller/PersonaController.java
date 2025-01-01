@@ -63,9 +63,10 @@ public class PersonaController {
             String username = (String) request.get("username");
             String personaName = (String) request.get("personaName");
             String description = (String) request.get("description");
+            Boolean generatePhoto = (Boolean) request.get("generatePhoto");
 
             // Log inputs
-            logMessage += "username: " + username + ", personaName: " + personaName + ", description: " + description;
+            logMessage += "username: " + username + ", personaName: " + personaName + ", description: " + description + ", generatePhoto: " + generatePhoto;
 
             // Validate Inputs
             if (username == null || username.isEmpty()) {
@@ -77,13 +78,16 @@ public class PersonaController {
             if (description == null || description.isEmpty()) {
                 return ResponseEntity.badRequest().body("Error: 'description' is required.");
             }
+            if (generatePhoto == null || generatePhoto) {
+                return ResponseEntity.badRequest().body("Error: 'generatePhoto' is required.");
+            }
 
             if (!userService.existByUsername(username)){
                 return ResponseEntity.badRequest().body("Error: User not found: " + username);
             }
 
             // Process the request
-            Persona newPersona =  personaService.registerPersona(username, personaName, description);
+            Persona newPersona =  personaService.registerPersona(username, personaName, description, generatePhoto);
             log.info(logMessage);
             return ResponseEntity.status(HttpStatus.CREATED).body(newPersona);
 
