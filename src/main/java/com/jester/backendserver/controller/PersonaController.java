@@ -32,21 +32,26 @@ public class PersonaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Persona>> getAllPersonas(@Valid @RequestBody Map<String, Object> request) {
+    public ResponseEntity<List<Persona>> getAllPersonas() {
         String logMessage = "GET /api/personas";
         log.info(logMessage);
-        String username = request.get("username").toString();
-        List<Persona> personas;
-        if (username == null || username.isEmpty()) {
-            personas = personaService.getPersonas();
-        }
-        else {
-            personas = personaService.getPersonasByUsername(username);
-        }
-
-
+        List<Persona> personas = personaService.getPersonas();
         return ResponseEntity.ok(personas);
     }
+
+    @PostMapping
+    public ResponseEntity<?> getPersonasByUsername(@Valid @RequestBody Map<String, Object> request) {
+        String logMessage = "POST /api/personas";
+
+        String username = request.get("username").toString();
+        log.info(logMessage + " username: " + username);
+        if (username == null || username.isEmpty()) {
+            return ResponseEntity.badRequest().body("Error: 'username' is required.");
+        }
+        List<Persona> personas = personaService.getPersonasByUsername(username);
+        return ResponseEntity.ok(personas);
+    }
+
 
     @GetMapping("/{pid}")
     public ResponseEntity<?> getPersona(@PathVariable Integer pid) {
