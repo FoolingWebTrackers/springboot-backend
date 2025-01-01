@@ -22,10 +22,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/personas")
 public class PersonaController {
-    private final String endpoint = "/api/personas";
-
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(PersonaController.class);
-
     private final PersonaService personaService;
     private final UserService userService;
 
@@ -36,15 +33,31 @@ public class PersonaController {
 
     @GetMapping
     public ResponseEntity<List<Persona>> getAllPersonas() {
-        String logMessage = "GET " + endpoint + ":";
+        String logMessage = "GET /api/personas";
         log.info(logMessage);
         List<Persona> personas = personaService.getPersonas();
         return ResponseEntity.ok(personas);
     }
 
+    @GetMapping("/{pid}")
+    public ResponseEntity<?> getPersona(@PathVariable Integer pid) {
+        String logMessage = "GET /api/personas/pid=" + pid;
+        log.info(logMessage);
+        if (pid == null || pid < 0) {
+            return ResponseEntity.badRequest().body("Error: A positive integer is required for pid");
+        }
+        Persona persona = personaService.getPersona(pid);
+        if (persona == null) {
+            return ResponseEntity.notFound().build();
+        }
+        else {
+            return ResponseEntity.ok(persona);
+        }
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> registerPersona(@Valid @RequestBody Map<String, Object> request) {
-        String logMessage = "POST /register: ";
+        String logMessage = "POST api/personas/register: ";
         try {
             // Extract inputs
             String username = (String) request.get("username");
@@ -73,8 +86,8 @@ public class PersonaController {
             Persona newPersona =  personaService.registerPersona(username, personaName, description);
             log.info(logMessage);
             return ResponseEntity.status(HttpStatus.CREATED).body(newPersona);
-        }
-        catch (Exception e) {
+
+        } catch (Exception e) {
             log.error("Error processing register request", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An unexpected error occurred. Please try again.");

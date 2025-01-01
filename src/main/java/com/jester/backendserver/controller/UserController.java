@@ -39,8 +39,20 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/{uid}")
+    public ResponseEntity<User> getUserByID(@Valid @PathVariable Long uid) {
+        log.info("GET " + "/api/users/id=? {}", uid);
+        try {
+            return ResponseEntity.ok(userService.getUser(uid));
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with the given id: " + uid + " doesn't exist.");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
     @GetMapping("/getByUsername")
-    public ResponseEntity<User> getUser(@Valid @RequestParam String username) {
+    public ResponseEntity<User> getUserByUsername(@Valid @RequestParam String username) {
         log.info("GET " + endpoint + "/getByUsername? {}", username);
         try {
             return ResponseEntity.ok(userService.getUserByUsername(username));
@@ -74,9 +86,9 @@ public class UserController {
             }
 
             // Process the request
-            userService.registerUser(username, password);
+            User newuser = userService.registerUser(username, password);
             log.info(logMessage);
-            return ResponseEntity.status(HttpStatus.CREATED).body("User created with username: " + username);
+            return ResponseEntity.status(HttpStatus.CREATED).body("User created with username: " + newuser.getUsername());
         }
         catch (Exception e) {
             log.error("Error processing register request", e);

@@ -3,7 +3,7 @@ package com.jester.backendserver.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +41,8 @@ public class Persona {
     @JsonIgnore
     private List<PersonaLink> links;
 
+    // Getters and Setters
+
     public Integer getId() {
         return id;
     }
@@ -71,6 +73,23 @@ public class Persona {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    @JsonProperty("imageBase64")
+    public String getImageBase64() {
+        if (image == null || image.length == 0) {
+            return null;
+        }
+        return Base64.getEncoder().encodeToString(image);
+    }
+
+    @JsonProperty("imageBase64")
+    public void setImageBase64(String base64Image) {
+        if (base64Image != null && !base64Image.isEmpty()) {
+            this.image = Base64.getDecoder().decode(base64Image);
+        } else {
+            this.image = null;
+        }
     }
 
     @JsonProperty("users")
@@ -118,5 +137,4 @@ public class Persona {
                 ", links=" + (links != null ? links.size() + " links" : "null") +
                 '}';
     }
-
 }

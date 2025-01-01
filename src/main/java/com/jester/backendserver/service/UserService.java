@@ -21,12 +21,26 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean authenticate(String username, String password) {
-        return userProcedureRepository.authenticateUser(username, password);
-    }
-
     public List<User> getUsers() {
         return userRepository.findAll();
+    }
+
+    public User getUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new NoSuchElementException("User with id '" + id + "' not found.");
+        }
+        return user.get();
+    }
+
+    public User getUserByUsername(String username) {
+        User user;
+        try {
+            user = userRepository.getUserByUsername(username).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            throw new NoSuchElementException("User with username '" + username + "' not found.");
+        }
+        return user;
     }
 
     @Transactional
@@ -40,18 +54,13 @@ public class UserService {
             throw new Exception("Username " + username + " already exists");
         }
     }
+    public boolean authenticate(String username, String password) {
+        return userProcedureRepository.authenticateUser(username, password);
+    }
 
     public boolean existByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 
-    public User getUserByUsername(String username) {
-        User user;
-        try {
-            user = userRepository.getUserByUsername(username).get(0);
-        } catch (IndexOutOfBoundsException e) {
-            throw new NoSuchElementException("User with username '" + username + "' not found.");
-        }
-        return user;
-    }
+
 }
