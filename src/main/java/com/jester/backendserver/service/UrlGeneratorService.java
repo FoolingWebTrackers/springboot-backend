@@ -20,7 +20,6 @@ public class UrlGeneratorService {
     String API_KEY = "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";
 
     public List<String> getLinksFromApi(String personaDesc) {
-        String url = "https://api.perplexity.ai/chat/completions";
 
         String contentBody = String.format("""
                 {
