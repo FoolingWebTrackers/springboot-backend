@@ -1,5 +1,7 @@
 package com.jester.backendserver.service;
 
+import com.jester.backendserver.controller.MarketPlaceController;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,6 +20,8 @@ public class UrlGeneratorService {
     // Perplexity
     String API_URL = "https://api.perplexity.ai/chat/completions";
     String API_KEY = "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";
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(MarketPlaceController.class);
+
 
     public List<String> getLinksFromApi(String personaDesc) {
 
@@ -43,9 +47,11 @@ public class UrlGeneratorService {
         try {
             ResponseEntity<String> response = restTemplate.exchange(API_URL, HttpMethod.POST, request, String.class);
             String responseBody = response.getBody();
-
+            System.out.println(responseBody);
             // Extract links from the response
-            return extractLinks(responseBody);
+            List<String> links = extractLinks(responseBody);
+            System.out.println(links);
+            return links;
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch links", e);
         }
@@ -53,14 +59,21 @@ public class UrlGeneratorService {
 
     private List<String> extractLinks(String content) {
         Set<String> linkSet = new HashSet<>();
-        Pattern pattern = Pattern.compile("https?://[^\\s]+");
+        Pattern pattern = Pattern.compile("https?://[^\\s\\\\]+");
         Matcher matcher = pattern.matcher(content);
+
 
         while (matcher.find()) {
             String url = matcher.group();
+
+            if (url.contains("**")) {
+                url = url.split("\\*\\*")[0].trim();
+            }
+
             linkSet.add(url.replaceAll("[.,!?)]*$", "").trim());
         }
 
+        log.info("Extracted {} links", linkSet.size());
         return List.copyOf(linkSet);
     }
 }

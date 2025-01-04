@@ -17,11 +17,25 @@ public class Marketplace {
     @JsonIgnore
     private User seller;
 
+    @Transient
+    private Integer sellerId;
+
     @ManyToOne
     @MapsId("personaId")
     @JoinColumn(name = "persona_id", insertable = false, updatable = false)
-    @JsonIgnore
+    //@JsonIgnore
     private Persona persona;
+
+    @PostLoad
+    private void setSellerIdFromSeller() {
+        if (seller != null) {
+            this.sellerId = seller.getId();
+        }
+    }
+
+    public Integer getSellerId() {
+        return sellerId;
+    }
 
     @Column(name = "user_num")
     private Integer userNum;
