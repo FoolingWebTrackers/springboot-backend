@@ -283,13 +283,43 @@
 					"response": []
 				},
 				{
+					"name": "Get Personas Of A User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "username",
+								"value": "user1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/personas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"personas"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create Persona",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"nyverin\",\n    \"personaName\": \"NewPersona10\",\n    \"description\": \"Created by murat for eray\"\n}\n",
+							"raw": "{\n    \"username\": \"user1\",\n    \"personaName\": \"Persona1\",\n    \"description\": \"A cartoonish, very abstract circular avatar of the following: A crazy persona preparing for a post apocalyptic war. \",\n    \"generatePhoto\": false\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -331,6 +361,199 @@
 							"path": [
 								"personas",
 								"url"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API Debug",
+			"item": [
+				{
+					"name": "Image Gen",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/debug/generate?personaDesc=A persona preparing for nuclear war, cartoonish avatar",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"debug",
+								"generate"
+							],
+							"query": [
+								{
+									"key": "personaDesc",
+									"value": "A persona preparing for nuclear war, cartoonish avatar"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Url Gen (Perplexity)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/debug/get-links?personaDesc=A spors enthusiast interested in high end sneakers and shoes. An avid nike fan. Also interested in olympic running and near marathon events.",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"debug",
+								"get-links"
+							],
+							"query": [
+								{
+									"key": "personaDesc",
+									"value": "A spors enthusiast interested in high end sneakers and shoes. An avid nike fan. Also interested in olympic running and near marathon events."
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/marketplace",
+			"item": [
+				{
+					"name": "Get Marketplace",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"user2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/marketplace/items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marketplace",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell Persona",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"user1\",\n    \"personaName\": \"Persona22\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/marketplace/sell-persona",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marketplace",
+								"sell-persona"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy Persona",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"user1\",\n    \"personaName\":\"Persona1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/marketplace/buy-persona",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marketplace",
+								"buy-persona"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Persona",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"user1\",\n    \"personaName\":\"Persona5\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/marketplace/remove",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marketplace",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Seller's Persona",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"user1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/marketplace/seller-personas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"marketplace",
+								"seller-personas"
 							]
 						}
 					},
