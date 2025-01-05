@@ -6,6 +6,7 @@ target/
 .env
 .mvn
 .mvn/*
+data
 
 ### STS ###
 .apt_generated
