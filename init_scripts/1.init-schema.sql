@@ -26,7 +26,7 @@ CREATE TABLE user_personas (
 
 CREATE TABLE persona_links(
 	persona_id INT NOT NULL,
-	link TEXT UNIQUE NOT NULL,
+	link TEXT NOT NULL,
 	PRIMARY KEY (persona_id, link),
 	FOREIGN KEY (persona_id) REFERENCES persona(id) ON DELETE CASCADE
 );

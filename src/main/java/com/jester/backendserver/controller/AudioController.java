@@ -24,7 +24,7 @@ public class AudioController {
 
     @Autowired
     SpeechGeneratorService speechGeneratorService;
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(MarketPlaceController.class);
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(AudioController.class);
 
     @PostMapping
     public ResponseEntity<?> getSpeechAudio(@Valid @RequestBody Map<String, Object> request) throws IOException {

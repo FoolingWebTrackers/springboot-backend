@@ -32,7 +32,7 @@ public class SpeechGeneratorService {
                 {
                     "messages": [
                         {
-                            "content": "Act as a '%s' and generate a casual conversational speech, having 100 words. Only output the speech itself. Does not output anything else.",
+                            "content": "Act as a '%s' and generate a casual conversational speech, having 100 words. Only output the speech itself. Do not output anything else.",
                             "role": "user"
                         }
                     ],
@@ -51,7 +51,6 @@ public class SpeechGeneratorService {
             ResponseEntity<String> response = restTemplate.exchange(SPEECH_API_URL, HttpMethod.POST, request, String.class);
             String responseBody = response.getBody();
 
-            // Extract links from the response
             return responseBody;
         } catch (Exception e) {
             throw new RuntimeException("Failed to fetch links", e);
