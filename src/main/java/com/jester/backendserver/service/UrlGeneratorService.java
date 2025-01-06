@@ -87,7 +87,7 @@ public class UrlGeneratorService {
                 """
                         You are an intelligent system designed to find the most relevant URLs based on a given persona description. \s
                         Your task is to provide a list of links tailored to the persona's interests. \s
-                        The links can include websites, search queries (google.com/search?q=`keyword`), X entries, web articles, blogs, social media posts, pdf files, products in e-commerce marketplaces etc..\s
+                        The links can include websites, search queries, X entries, web articles, blogs, social media posts, pdf files, products in e-commerce marketplaces etc.. Find anything related.\s
                         You have to find varied links which illustrate what the given persona can search on the web.
                         
                         **Persona Description:**
@@ -97,7 +97,7 @@ public class UrlGeneratorService {
                         Do NOT include anything else than the link list.
                         Do NOT include any descriptions, output ONLY the raw link array.
                         
-                        Generate 200 links now. Use AT LEAST 10 different websites. DO NOT GIVE ANY DUPLICATE LINKS!!
+                        Generate 200 links now. DO NOT GIVE ANY DUPLICATE LINKS!!
                 """
         , personaDesc);
     }
