@@ -1,7 +1,6 @@
 package com.jester.backendserver.controller;
 
 import com.jester.backendserver.model.User;
-import com.jester.backendserver.repository.UserProcedureRepository;
 import com.jester.backendserver.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +21,10 @@ import java.util.NoSuchElementException;
 public class UserController {
     private final String endpoint = "/api/users";
 
-    private final UserProcedureRepository userProcedureRepository;
     private final UserService userService;
     private final org.slf4j.Logger log;
 
-    public UserController(UserProcedureRepository userProcedureRepository, UserService userService) {
-        this.userProcedureRepository = userProcedureRepository;
+    public UserController(UserService userService) {
         this.userService = userService;
         this.log = LoggerFactory.getLogger(Logger.class);
     }
@@ -117,7 +114,7 @@ public class UserController {
             }
 
             // Process the request
-            boolean isAuthenticated = userProcedureRepository.authenticateUser(username, password);
+            boolean isAuthenticated = userService.authenticate(username, password);
             if (isAuthenticated) {
                 log.info(logMessage + "User authenticated.");
                 return ResponseEntity.ok("Authentication Successful");
@@ -138,5 +135,4 @@ public class UserController {
         log.info(logMessage);
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Deletion is not yet implemented, our DB doesn't support it. Please contact Bilgehan Sahlan so he can implement it.");
     }
-
 }
