@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
@@ -70,7 +71,7 @@ public class MarketPlaceController {
         User user;
         try{
             user = userService.getUserByUsername(username);
-        } catch (IndexOutOfBoundsException e) {
+        } catch (NoSuchElementException e) {
             return ResponseEntity.badRequest().body("Error: user with username: " + " does not exist.");
         }
 

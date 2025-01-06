@@ -1,40 +1,36 @@
 package com.jester.backendserver.controller;
 
-import com.jester.backendserver.model.Marketplace;
 import com.jester.backendserver.service.SpeechGeneratorService;
 import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/audio")
-public class AudioController {
+public class PersonaAudioController {
 
     @Autowired
     SpeechGeneratorService speechGeneratorService;
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(AudioController.class);
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(PersonaAudioController.class);
 
     @PostMapping
-    public ResponseEntity<?> getSpeechAudio(@Valid @RequestBody Map<String, Object> request) throws IOException {
+    public ResponseEntity<?> getAudio(@Valid @RequestBody Map<String, Object> request) throws IOException {
         String logMessage = "POST /api/audio";
 
-        String description = request.get("speech").toString();
-        log.info(logMessage + " persona description: " + description);
+        String text = request.get("text").toString();
+        log.info(logMessage + " text: " + text);
 
-        //List<Persona> personas = .getPersonasByUsername(username);
-        byte[] speech = speechGeneratorService.getSpeech(description);
+        byte[] speech = speechGeneratorService.getSpeech(text);
         System.out.println(speech.toString());
 
         /*
@@ -49,9 +45,7 @@ public class AudioController {
         String base64Audio = Base64.getEncoder().encodeToString(speech);
         log.info("Converted audio to Base64.");
 
-        // Return the Base64 string as the response
-        return ResponseEntity.ok(base64Audio);
-        //return ResponseEntity.ok(speech);
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType("audio/mpeg")).body(base64Audio);
     }
 
     @PostMapping("/generatespeech")

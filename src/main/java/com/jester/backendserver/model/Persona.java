@@ -41,6 +41,11 @@ public class Persona {
     @JsonIgnore
     private List<PersonaLink> links;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
     // Getters and Setters
 
     public Integer getId() {
@@ -92,6 +97,16 @@ public class Persona {
         }
     }
 
+    @JsonProperty
+    public String getOwnerName() {
+        if (owner == null) {
+            return null;
+        }
+        else {
+            return owner.getUsername();
+        }
+    }
+
     @JsonProperty("users")
     public List<String> getUserStrings() {
         if (users == null) {
@@ -126,6 +141,14 @@ public class Persona {
         this.links = links;
     }
 
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
     @Override
     public String toString() {
         return "Persona{" +
@@ -133,6 +156,7 @@ public class Persona {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", image=" + (image != null ? image.length + " bytes" : "null") +
+                ", owner=" + (owner != null ? owner.getUsername() : "null") +
                 ", users=" + (users != null ? users.size() + " users" : "null") +
                 ", links=" + (links != null ? links.size() + " links" : "null") +
                 '}';

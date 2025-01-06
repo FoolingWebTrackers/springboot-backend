@@ -95,17 +95,21 @@ CREATE FUNCTION create_persona(uname TEXT, pname TEXT, pDesc TEXT)
 AS $$
 DECLARE
     created_persona_id INT; -- Variable to store the created persona's ID
+    user_id INT; -- Variable to store the owner's user ID
 BEGIN
+    -- Get the user ID for the given username
+    SELECT id INTO user_id
+    FROM users
+    WHERE username = uname;
+
     -- Insert into persona and get the generated ID
-    INSERT INTO persona (name, description)
-    VALUES (pname, pDesc)
+    INSERT INTO persona (name, description, owner_id)
+    VALUES (pname, pDesc, user_id)
     RETURNING id INTO created_persona_id;
 
     -- Insert into user_personas using the created persona ID
     INSERT INTO user_personas (user_id, persona_id, first_access_date)
-    SELECT u.id, created_persona_id, CURRENT_DATE
-    FROM users u
-    WHERE u.username = uname;
+    VALUES (user_id, created_persona_id, CURRENT_DATE);
 
     -- Return the created persona ID
     RETURN created_persona_id;

@@ -11,7 +11,9 @@ CREATE TABLE persona (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     description TEXT,
-    image BYTEA
+    image BYTEA,
+    owner_id INT NOT NULL,
+    FOREIGN KEY (owner_id) REFERENCES users(id)
 );
 
 CREATE TABLE user_personas (
