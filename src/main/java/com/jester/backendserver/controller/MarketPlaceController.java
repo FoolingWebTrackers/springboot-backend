@@ -121,7 +121,7 @@ public class MarketPlaceController {
         return ResponseEntity.ok(marketplace);
     }
 
-    @DeleteMapping("/remove")
+    @PostMapping("/remove")
     public ResponseEntity<?> removeFromMarketplace(@Valid @RequestBody Map<String, Object> request) {
 
         String logMessage = "POST /api/marketplace";
