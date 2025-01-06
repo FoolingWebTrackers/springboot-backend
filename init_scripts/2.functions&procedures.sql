@@ -272,14 +272,16 @@ BEGIN
     SELECT id INTO uid FROM users WHERE username = uname;
 
     RETURN QUERY
-    SELECT
-        m.seller_id,
-        m.persona_id,
-        m.user_num
-    FROM
-        marketplace m
-    WHERE
-        m.seller_id != uid;
+SELECT
+    m.seller_id,
+    m.persona_id,
+    m.user_num
+FROM
+    marketplace m
+WHERE
+    m.seller_id != uid and m.persona_id NOT IN (SELECT up.persona_id
+												FROM user_personas up
+	                                            WHERE user_id = uid);
 END;
 $$;
 
