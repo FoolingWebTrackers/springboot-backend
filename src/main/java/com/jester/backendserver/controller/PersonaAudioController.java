@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -30,8 +31,11 @@ public class PersonaAudioController {
         String text = request.get("text").toString();
         log.info(logMessage + " text: " + text);
 
+        if (text == null || text.isEmpty()) {
+            return ResponseEntity.badRequest().body("Error: 'text' is required.");
+        }
+
         byte[] speech = speechGeneratorService.getSpeech(text);
-        System.out.println(speech.toString());
 
         /*
         try (FileOutputStream fileOutputStream = new FileOutputStream("output.mp3")) {
@@ -45,7 +49,10 @@ public class PersonaAudioController {
         String base64Audio = Base64.getEncoder().encodeToString(speech);
         log.info("Converted audio to Base64.");
 
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType("audio/mpeg")).body(base64Audio);
+        Map<String, String> response = new HashMap<>();
+        response.put("base64audio", base64Audio);
+
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/generatespeech")
